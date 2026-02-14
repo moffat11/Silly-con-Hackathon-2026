@@ -141,7 +141,7 @@ def main():
     
     print("\n✅ Training complete! Model ready to use.")
     print("\nNext steps:")
-    print("1. Run: streamlit run app/streamlit_app.py")
+    print("1. Run: streamlit run app/final_streamlit_app.py")
 
 if __name__ == '__main__':
     main()
