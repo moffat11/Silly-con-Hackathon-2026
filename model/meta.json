@@ -1,0 +1,8 @@
+{
+  "metrics": {
+    "f1": 0.6725905673274094,
+    "auc": 0.9587625046534137
+  },
+  "model_type": "TfidfVectorizer + LogisticRegression",
+  "features": 10000
+}

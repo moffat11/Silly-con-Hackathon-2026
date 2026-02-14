@@ -16,15 +16,19 @@ import os
 def load_data(data_path):
     """Load the Jigsaw toxicity dataset"""
     print(f"📂 Loading data from {data_path}...")
-    df = pd.read_csv(data_path)
+    # Handle malformed rows by skipping bad lines
+    df = pd.read_csv(data_path, encoding='latin-1', on_bad_lines='skip', engine='python')
     
     # Keep only text and toxic column
     df = df[['comment_text', 'toxic']].copy()
     df.columns = ['text', 'is_toxic']
     
+    # Convert toxic column to integer (handle any string values)
+    df['is_toxic'] = pd.to_numeric(df['is_toxic'], errors='coerce').fillna(0).astype(int)
+    
     print(f"✅ Loaded {len(df)} comments")
     print(f"   Toxic: {df['is_toxic'].sum()} ({df['is_toxic'].mean()*100:.1f}%)")
-    print(f"   Non-toxic: {(~df['is_toxic'].astype(bool)).sum()}")
+    print(f"   Non-toxic: {(df['is_toxic'] == 0).sum()}")
     
     return df
 
@@ -52,8 +56,7 @@ def train_model(df, max_samples=50000):
         df['text'], 
         df['is_toxic'], 
         test_size=0.2, 
-        random_state=42,
-        stratify=df['is_toxic']
+        random_state=42
     )
     
     print(f"   Train: {len(X_train)} samples")
